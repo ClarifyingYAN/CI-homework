@@ -36,53 +36,64 @@ public class ACO {
      * 开始执行 ACO
      */
     public void run() {
-        // 蚂蚁初始化
-        int[] initCities = Util.randomArray(0, cityCnt-1, m);
 
-        for (int i=0; i<m; i++) {
-            Ant ant = new Ant(initCities[i], cityCnt);
-            ants.add(ant);
-        }
+        for (int p=0; p<1000; ++p) {
+            // 蚂蚁初始化
+            int[] initCities = Util.randomArray(0, cityCnt-1, m);
+            for (int i=0; i<m; i++) {
+                Ant ant = new Ant(initCities[i], cityCnt);
+                if (ants.size()==m)
+                    ants.set(i, ant);
+                else
+                    ants.add(ant);
+            }
 
-        int z=1;
-        while (z<cityCnt-1) {
-            for (int i=0; i<m; ++i) {
-                Map map = calculateProbabilties(ants.get(i).getVisitedCity(),ants.get(i).getRestCity());
-                int city = rouletteWheelSelection(map);
+            // 计算概率
+            int z=1;
+            while (z<cityCnt-1) {
+                for (int i=0; i<m; ++i) {
+                    Map map = calculateProbabilties(ants.get(i).getVisitedCity(),ants.get(i).getRestCity());
+                    int city = rouletteWheelSelection(map);
+                    ants.get(i).visitCity(city);
+                }
+
+                ++z;
+            }
+
+            // 访问最后一个城市
+            for (int i=0; i<m; i++) {
+                int city = ants.get(i).getRestCity().get(0);
                 ants.get(i).visitCity(city);
             }
 
-            ++z;
-        }
-
-        for (int i=0; i<m;i++) {
-            int city = ants.get(i).getRestCity().get(0);
-            ants.get(i).visitCity(city);
-        }
-
-        // 得出结果
-        for (int i=0; i<m; ++i) {
-            solution.add(ants.get(i).getVisitedCity());
-        }
-
-        // 计算路径长度
-        int t=0;
-        for (List l:solution) {
-            double sum=0;
-            int tmp=-1;
-            for (int j=0; j<l.size();++j) {
-                if (j!=0) {
-                    sum+=d[tmp][(int) l.get(j)];
-                }
-                tmp=(int) l.get(j);
+            // 得出结果
+            for (int i=0; i<m; ++i) {
+                if (solution.size()==3)
+                    solution.set(i, ants.get(i).getVisitedCity());
+                else
+                    solution.add(ants.get(i).getVisitedCity());
             }
-            sum+=d[(int) l.get(l.size()-1)][(int) l.get(0)];
-            c[t] = sum;
-            t++;
+
+            // 计算路径长度
+            int t=0;
+            for (List l:solution) {
+                double sum=0;
+                int tmp=-1;
+                for (int j=0; j<l.size();++j) {
+                    if (j!=0) {
+                        sum+=d[tmp][(int) l.get(j)];
+                    }
+                    tmp=(int) l.get(j);
+                }
+                sum+=d[(int) l.get(l.size()-1)][(int) l.get(0)];
+                c[t] = sum;
+                t++;
+            }
+
+            // 更新信息素
+            refreshPheromone();
         }
 
-        // 更新信息素
-        refreshPheromone();
     }
 
     /**
