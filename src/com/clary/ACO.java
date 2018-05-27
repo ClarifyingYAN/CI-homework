@@ -52,7 +52,7 @@ public class ACO {
             int z=1;
             while (z<cityCnt-1) {
                 for (int i=0; i<m; ++i) {
-                    Map map = calculateProbabilties(ants.get(i).getVisitedCity(),ants.get(i).getRestCity());
+                    Map<Integer, Double> map = calculateProbabilties(ants.get(i).getVisitedCity(),ants.get(i).getRestCity());
                     int city = rouletteWheelSelection(map);
                     ants.get(i).visitCity(city);
                 }
@@ -60,11 +60,13 @@ public class ACO {
                 ++z;
             }
 
-            // 访问最后一个城市
+            // 访问最后一个城市,回到第一个城市
             for (int i=0; i<m; i++) {
                 int city = ants.get(i).getRestCity().get(0);
                 ants.get(i).visitCity(city);
+                ants.get(i).visitCity(ants.get(i).getVisitedCity().get(0));
             }
+
 
             // 得出结果
             for (int i=0; i<m; ++i) {
@@ -85,7 +87,7 @@ public class ACO {
                     }
                     tmp=(int) l.get(j);
                 }
-                sum+=d[(int) l.get(l.size()-1)][(int) l.get(0)];
+//                sum+=d[(int) l.get(l.size()-1)][(int) l.get(0)];
                 c[t] = sum;
                 t++;
             }
