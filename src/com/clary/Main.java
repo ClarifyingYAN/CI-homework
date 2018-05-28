@@ -10,6 +10,10 @@ public class Main {
                 {1,5,-1,2},
                 {2,4,2,-1}
         };
+        int m=3;
+        double alpha=1,beta=2,rho=0.5;
+        System.out.println(String.format("初始化参数为：α=%.1f,β=%.1f,⍴=%.1f，采用%d只蚂蚁", alpha, beta, rho, m));
+
         System.out.println("图的二维矩阵为: ");
         for (int i = 0; i < d.length; i++) {
             for (int j = 0; j < d[i].length; j++) {
@@ -18,9 +22,7 @@ public class Main {
             System.out.println();
         }
 
-        int m=3;
-
-        ACO aco = new ACO(m, d);
+        ACO aco = new ACO(m, d, alpha, beta, rho);
         aco.run();
         List<List<Integer>> list = aco.getSolution();
         double c[] = aco.getC();

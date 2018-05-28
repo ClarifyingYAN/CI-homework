@@ -3,9 +3,9 @@ package com.clary;
 import java.util.*;
 
 public class ACO {
-    final private double alpha = 1.0;
-    final private double beta = 2.0;
-    final private double rho = 0.5;
+    final private double alpha;
+    final private double beta;
+    final private double rho;
     final private int m; // 蚂蚁数
     final private double tauZero;
     final private int cityCnt;
@@ -16,9 +16,13 @@ public class ACO {
     private List<List<Integer>> solution = new ArrayList<>();
     private double[] c; // 路径长度
 
-    public ACO(int m, int[][] d) {
+    public ACO(int m, int[][] d, double alpha, double beta, double rho) {
         this.d = d;
         this.m=m;
+        this.alpha = alpha;
+        this.beta = beta;
+        this.rho = rho;
+
         cityCnt = d.length;
         c = new double[m];
 
