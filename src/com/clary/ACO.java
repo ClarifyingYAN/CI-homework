@@ -3,12 +3,12 @@ package com.clary;
 import java.util.*;
 
 public class ACO {
-    final private double alpha;
-    final private double beta;
-    final private double rho;
-    final private int m; // 蚂蚁数
-    final private double tauZero;
-    final private int cityCnt;
+    private final double alpha;
+    private final double beta;
+    private final double rho;
+    private final int m; // 蚂蚁数
+    private final double tauZero;
+    private final int cityCnt;
 
     private int[][] d; // distance
     private double[][] pheromone; // 信息素
